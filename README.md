@@ -1,84 +1,124 @@
-# Turborepo starter
+# 🥋 Jiu-Jitsu SaaS + RBAC
 
-This Turborepo starter is maintained by the Turborepo core team.
+Este projeto é uma base completa para construir um SaaS multi-tenant com foco em academias de jiu-jitsu. Ele inclui autenticação, autorização por papéis (RBAC), gestão de academias, turmas e faturamento.
 
-## Using this example
+---
 
-Run the following command:
+## ✅ Funcionalidades
 
-```sh
-npx create-turbo@latest
-```
+### 🔐 Autenticação
 
-## What's inside?
+- [ ] Autenticação por e-mail e senha;
+- [ ] Autenticação via conta do Google;
+- [ ] Recuperação de senha por e-mail;
+- [ ] Criação de conta (nome, e-mail e senha);
 
-This Turborepo includes the following packages/apps:
+### 🥋 Academias
 
-### Apps and Packages
+- [ ] Criar nova academia;
+- [ ] Listar academias do usuário;
+- [ ] Atualizar dados da academia;
+- [ ] Encerrar uma academia;
+- [ ] Transferir a propriedade da academia;
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### 📩 Convites
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- [ ] Convidar novo membro (e-mail e função);
+- [ ] Aceitar convite;
+- [ ] Revogar convite pendente;
 
-### Utilities
+### 👥 Membros
 
-This Turborepo has some additional tools already setup for you:
+- [ ] Listar membros da academia;
+- [ ] Atualizar função de um membro;
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+### 🏫 Turmas (Classes)
 
-### Build
+- [ ] Listar turmas da academia;
+- [ ] Criar nova turma (nome, horários, instrutor);
+- [ ] Atualizar turma;
+- [ ] Excluir turma;
 
-To build all apps and packages, run the following command:
+### 💳 Faturamento
 
-```
-cd my-turborepo
-pnpm build
-```
+- [ ] Visualizar dados de cobrança da academia (`R$10 por membro`, exceto função `billing`);
+- [ ] Exportar informações de cobrança;
 
-### Develop
+---
 
-To develop all apps and packages, run the following command:
+## 🔐 RBAC – Papéis e Permissões
 
-```
-cd my-turborepo
-pnpm dev
-```
+### 🎭 Papéis disponíveis
 
-### Remote Caching
+- **Administrador (Owner)** — dono da academia
+- **Instrutor** — responsável técnico pelos treinos
+- **Recepção (Billing)** — gestão financeira e suporte
+- **Aluno** — usuário comum matriculado
+- **Responsável** — pais ou responsáveis legais
+- **Lead** — interessado ainda não matriculado
+- **Anônimo** — visitante não autenticado
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+---
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### 📊 Tabela de Permissões
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+| Ação                               | Admin | Instrutor | Recepção | Aluno | Responsável | Lead | Anônimo |
+| ---------------------------------- | :---: | :-------: | :------: | :---: | :---------: | :--: | :-----: |
+| Atualizar dados da academia        |  ✅   |    ❌     |    ❌    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Deletar academia                   |  ✅   |    ❌     |    ❌    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Convidar membros                   |  ✅   |    ❌     |    ✅    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Revogar convite                    |  ✅   |    ❌     |    ✅    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Listar membros da academia         |  ✅   |    ✅     |    ✅    |  ⚠️   |     ✅      |  ❌  |   ❌    |
+| Transferir propriedade da academia |  ⚠️   |    ❌     |    ❌    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Atualizar papel de um membro       |  ✅   |    ❌     |    ✅    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Excluir um membro                  |  ✅   |    ⚠️     |    ❌    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Listar turmas                      |  ✅   |    ✅     |    ✅    |  ⚠️   |     ✅      |  ❌  |   ❌    |
+| Criar turma                        |  ✅   |    ✅     |    ⚠️    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Atualizar turma                    |  ✅   |    ✅     |    ⚠️    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Excluir turma                      |  ✅   |    ✅     |    ⚠️    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Visualizar dados de faturamento    |  ✅   |    ❌     |    ✅    |  ❌   |     ❌      |  ❌  |   ❌    |
+| Exportar dados de faturamento      |  ✅   |    ❌     |    ✅    |  ❌   |     ❌      |  ❌  |   ❌    |
 
-```
-cd my-turborepo
-npx turbo login
-```
+> ✅ = permitido  
+> ❌ = não permitido  
+> ⚠️ = permitido com condições específicas
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+---
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## 📌 Regras Condicionais
 
-```
-npx turbo link
-```
+- Apenas **administradores** podem transferir a propriedade da academia;
+- **Instrutores** só podem editar/excluir turmas das quais são responsáveis;
+- **Alunos** e **responsáveis** podem visualizar apenas dados da própria academia;
+- **Leads** e **anônimos** não têm acesso ao ambiente interno;
 
-## Useful Links
+---
 
-Learn more about the power of Turborepo:
+## 🛠️ Tecnologias principais
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- [Next.js](https://nextjs.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Prisma ORM](https://www.prisma.io/)
+- [NextAuth.js](https://next-auth.js.org/)
+- [CASL](https://casl.js.org/) para permissões
+- [Stripe](https://stripe.com/) para billing
+- [Zod](https://zod.dev/) para validações
+- [tRPC](https://trpc.io/) para rotas typesafe (opcional)
+
+---
+
+## 📁 Estrutura multi-tenant
+
+Cada usuário pode pertencer a múltiplas **academias** com diferentes papéis, garantindo isolamento de dados e controle de acesso por RBAC.
+
+---
+
+## 🧪 Testes e deploy
+
+> Em desenvolvimento. Deploy sugerido via Vercel + Railway ou Supabase.
+
+---
+
+## 📄 Licença
+
+MIT © Thiago – Desenvolvido com foco em projetos reais de academias.
