@@ -20,9 +20,10 @@ model User {
   tokens        Token[]
   accounts      Account[]
   invites       Invite[]
-  member_on     Member[]
-  owns_academies Academy[]
-  owns_classes   Class[]
+  memberships    Member[]
+  academiesOwned Academy[]
+  classesOwned   Class[]
+   enrollments    Enrollment[] 
 
   @@map("users")
 }
@@ -92,6 +93,7 @@ model Member {
   userId String @map("user_id")
 
   @@unique([academyId, userId])
+  @@index([userId, academyId])
   @@map("members")
 }
 
@@ -105,13 +107,14 @@ model Academy {
   createdAt                 DateTime @default(now()) @map("created_at")
   updatedAt                 DateTime @updatedAt @map("updated_at")
 
-  owner  User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
+  owner  User   @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
 
   invites Invite[]
   members Member[]
   classes Class[]
 
+  @@index([ownerId])
   @@map("academies")
 }
 
@@ -127,8 +130,25 @@ model Class {
   academy   Academy @relation(fields: [academyId], references: [id])
   academyId String  @map("academy_id")
 
-  owner  User   @relation(fields: [userId], references: [id])
+  owner  User   @relation(fields: [ownerId], references: [id])
+  ownerId String @map("owner_id")
+
+  enrollments Enrollment[]
+
+  @@index([ownerId])
+  @@map("classes")
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id])
   userId String @map("user_id")
 
-  @@map("classes")
+  class   Class  @relation(fields: [classId], references: [id])
+  classId String @map("class_id")
+
+  @@unique([userId, classId])
+  @@map("enrollments")
 }
