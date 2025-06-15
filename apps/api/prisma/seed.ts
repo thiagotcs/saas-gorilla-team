@@ -43,6 +43,7 @@ async function seed() {
       name: 'CT Gorilla Team (Matriz)',
       slug: 'ct-gorilla-team-matriz',
       avatarUrl: faker.image.avatar(),
+      domain: 'ctg.com'.toLowerCase(),
       shouldAttachUsersByDomain: true,
       ownerId: user.id,
       classes: {

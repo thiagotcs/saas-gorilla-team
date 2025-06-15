@@ -23,7 +23,7 @@ model User {
   memberships    Member[]
   academiesOwned Academy[]
   classesOwned   Class[]
-   enrollments    Enrollment[] 
+  enrollments    Enrollment[] 
 
   @@map("users")
 }
