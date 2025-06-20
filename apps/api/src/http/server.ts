@@ -18,6 +18,13 @@ import { requestPasswordRecover } from '@/http/routes/auth/request-password-reco
 import { resetPassword } from '@/http/routes/auth/reset-password'
 import { authenticateWithGoogle } from '@/http/routes/auth/authenticate-with-google'
 import { env } from '@saas/env'
+import { createAcademy } from '@/http/routes/gyms/create-academy'
+import { getMembership } from '@/http/routes/gyms/get-membership'
+import { getAcademys } from '@/http/routes/gyms/get-academys'
+import { getAcademy } from '@/http/routes/gyms/get-academy'
+import { updateAcademy } from '@/http/routes/gyms/update-academy'
+import { shutdownAcademy } from '@/http/routes/gyms/shutdown-academy'
+import { transferAcademy } from '@/http/routes/gyms/transfer-academy'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -62,6 +69,13 @@ app.register(authenticateWithGoogle)
 
 app.register(requestPasswordRecover)
 app.register(resetPassword)
+app.register(createAcademy)
+app.register(getMembership)
+app.register(getAcademys)
+app.register(getAcademy)
+app.register(updateAcademy)
+app.register(shutdownAcademy)
+app.register(transferAcademy)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log('HTTP server running!')
