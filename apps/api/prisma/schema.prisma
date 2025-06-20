@@ -63,6 +63,11 @@ enum Role {
   ADMIN
   MEMBER
   BILLING
+  INSTRUTOR
+  RECEPCAO
+  ALUNO
+  RESPONSAVEL
+  LEAD
 }
 
 model Invite {
