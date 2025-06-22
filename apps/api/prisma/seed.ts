@@ -46,7 +46,7 @@ async function seed() {
       domain: 'ctg.com'.toLowerCase(),
       shouldAttachUsersByDomain: true,
       ownerId: user.id,
-      classes: {
+      groups: {
         createMany: {
           data: Array.from({ length: 3 }).map(() => ({
             name: faker.lorem.words(3),
@@ -88,7 +88,7 @@ async function seed() {
       slug: 'gorilla-team-unidade-1',
       avatarUrl: faker.image.avatar(),
       ownerId: user.id,
-      classes: {
+      groups: {
         createMany: {
           data: Array.from({ length: 3 }).map(() => ({
             name: faker.lorem.words(3),
