@@ -9,10 +9,13 @@ import { User } from './models/user'
 import { permissions } from './permissions'
 import { userSubject } from './subjects/user'
 import { academySubject } from './subjects/academy'
-import { classSubject } from './subjects/class'
 import { roleSchema } from './roles'
+import { trainingGroupSubject } from './subjects/training-group'
+import { inviteSubject } from './subjects/invite'
+import { billingSubject } from './subjects/billing'
 
 export * from './models/academy'
+export * from './models/training-group'
 export * from './models/membership'
 export * from './models/user'
 export * from './roles'
@@ -20,7 +23,9 @@ export * from './roles'
 const appAbilitiesSchema = z.union([
   userSubject,
   academySubject,
-  classSubject,
+  inviteSubject,
+  billingSubject,
+  trainingGroupSubject,
   z.tuple([z.literal('manage'), z.literal('all')]),
 ])
 

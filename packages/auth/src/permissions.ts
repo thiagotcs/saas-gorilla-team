@@ -14,22 +14,28 @@ export const permissions: Record<Role, PermissionsByRole> = {
   },
   INSTRUTOR(_, { can }) {
     // can(['get', 'update'], 'User', { role: { $eq: 'ALUNO' } })
-    can('manage', 'Class')
+    can('manage', 'TrainingGroup')
   },
   RECEPCAO(user, { can }) {
     can('get', 'User')
-    can(['create', 'get'], 'Class')
-    // can(['update', 'delete'], 'Class', { ownerId: { $eq: user.id } })
+    can(['create', 'get'], 'TrainingGroup')
+    // can(['update', 'delete'], 'TrainingGroup', { ownerId: { $eq: user.id } })
   },
   ALUNO(user, { can }) {
     // can('get', 'User', { id: { $eq: user.id } })
-    // can('get', 'Class', { ownerId: { $eq: user.id } })
+    // can('get', 'TrainingGroup', { ownerId: { $eq: user.id } })
   },
   RESPONSAVEL(_, { can }) {
     can('get', 'User')
-    can('get', 'Class')
+    can('get', 'TrainingGroup')
   },
   LEAD(_, { can }) {
     can('create', 'User')
+  },
+  MEMBER: function (user: User, builder: AbilityBuilder<AppAbility>): void {
+    throw new Error('Function not implemented.')
+  },
+  BILLING: function (user: User, builder: AbilityBuilder<AppAbility>): void {
+    throw new Error('Function not implemented.')
   },
 }
