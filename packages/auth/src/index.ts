@@ -13,12 +13,24 @@ import { roleSchema } from './roles'
 import { trainingGroupSubject } from './subjects/training-group'
 import { inviteSubject } from './subjects/invite'
 import { billingSubject } from './subjects/billing'
+import { classSessionSubject } from './subjects/classSession'
+import { attendanceSubject } from './subjects/attendance'
+import { subscriptionPlanSubject } from './subjects/subscription-plan'
+import { subscriptionSubject } from './subjects/subscription'
+import { paymentTransactionSubject } from './subjects/payment-transaction'
+import { memberSubject } from './subjects/member'
 
 export * from './models/academy'
 export * from './models/training-group'
 export * from './models/membership'
 export * from './models/user'
 export * from './roles'
+export * from './models/class-session'
+export * from './models/attendance'
+export * from './models/subscription-plan'
+export * from './models/subscription'
+export * from './models/payment-transaction'
+export * from './models/member'
 
 const appAbilitiesSchema = z.union([
   userSubject,
@@ -26,6 +38,12 @@ const appAbilitiesSchema = z.union([
   inviteSubject,
   billingSubject,
   trainingGroupSubject,
+  classSessionSubject,
+  attendanceSubject,
+  subscriptionPlanSubject,
+  subscriptionSubject,
+  paymentTransactionSubject,
+  memberSubject,
   z.tuple([z.literal('manage'), z.literal('all')]),
 ])
 
