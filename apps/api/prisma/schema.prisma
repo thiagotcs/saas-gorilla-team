@@ -1,3 +1,13 @@
+enum Role {
+  ADMIN
+  MEMBER
+  BILLING
+  INSTRUTOR
+  RECEPCAO
+  ALUNO
+  RESPONSAVEL
+  LEAD
+}
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -59,16 +69,7 @@ model Account {
   @@map("accounts")
 }
 
-enum Role {
-  ADMIN
-  MEMBER
-  BILLING
-  INSTRUTOR
-  RECEPCAO
-  ALUNO
-  RESPONSAVEL
-  LEAD
-}
+
 
 model Invite {
   id        String   @id @default(uuid())
@@ -97,6 +98,10 @@ model Member {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @map("user_id")
 
+  attendedSessions Attendance[] // Relação com as presenças deste membro
+  taughtSessions   ClassSession[] @relation("InstructorToClassSession") // Se o membro for instrutor
+  subscriptions    Subscription[] // Se o membro possuir assinaturas
+
   @@unique([academyId, userId])
   @@index([userId, academyId])
   @@map("members")
@@ -118,6 +123,8 @@ model Academy {
   invites Invite[]
   members Member[]
   groups   TrainingGroup[]
+  classSessions ClassSession[]
+  subscriptionPlans SubscriptionPlan[]
 
   @@index([ownerId])
   @@map("academies")
@@ -138,10 +145,137 @@ model TrainingGroup {
   owner  User   @relation(fields: [ownerId], references: [id])
   ownerId String @map("owner_id")
 
-  enrollments Enrollment[]
+  enrollments Enrollment[] // Mantendo se ainda usar para matrícula "genérica" em turma
+  classSessions ClassSession[] // NOVA RELAÇÃO: uma turma tem muitas sessões de aula
 
   @@index([ownerId])
   @@map("training_groups")
+}
+
+// NOVA MODEL: ClassSession (Representa uma aula específica, uma ocorrência de um TrainingGroup)
+model ClassSession {
+  id              String        @id @default(uuid())
+  date            DateTime      @db.Date // A data da aula (ex: 2025-06-22)
+  startTime       DateTime      @db.Time(4) // O horário de início da aula (ex: 10:00)
+  endTime         DateTime      @db.Time(4) // O horário de término da aula (ex: 11:00)
+  status          String        @default("SCHEDULED") // SCHEDULED, CANCELED, COMPLETED
+  location        String?       // Onde a aula acontece (ex: "Tatame Principal", "Sala 1")
+  capacity        Int?          // Opcional: número máximo de alunos para esta sessão
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  // Linka a sessão a um TrainingGroup (turma/modalidade)
+  trainingGroup   TrainingGroup @relation(fields: [trainingGroupId], references: [id], onDelete: Cascade)
+  trainingGroupId String        @map("training_group_id")
+
+  // Instrutor responsável pela aula (referencia um Member com role INSTRUTOR)
+  instructor      Member?       @relation("InstructorToClassSession", fields: [instructorMemberId], references: [id], onDelete: SetNull)
+  instructorMemberId String?    @map("instructor_member_id")
+
+  // Para garantir isolamento e facilitar queries por academia
+  academy         Academy       @relation(fields: [academyId], references: [id])
+  academyId       String        @map("academy_id")
+
+  attendances     Attendance[] // Relação com as presenças desta sessão
+
+  @@index([academyId])
+  @@index([trainingGroupId])
+  @@map("class_sessions")
+}
+
+// NOVA MODEL: Attendance (Registro de presença de um aluno em uma ClassSession)
+model Attendance {
+  id           String   @id @default(uuid())
+  checkInTime  DateTime @default(now()) @map("check_in_time")
+  checkOutTime DateTime? // Opcional: para registrar a saída
+  status       String   @default("PRESENT") // PRESENT, ABSENT, LATE, EXCUSED
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // O aluno que registrou a presença (referencia um Member com role ALUNO)
+  student        Member       @relation(fields: [studentMemberId], references: [id], onDelete: Cascade)
+  studentMemberId String      @map("student_member_id")
+
+  // A sessão de aula a que se refere a presença
+  classSession   ClassSession @relation(fields: [classSessionId], references: [id], onDelete: Cascade)
+  classSessionId String       @map("class_session_id")
+
+  // Para garantir isolamento e facilitar queries por academia
+  academyId      String
+  @@index([academyId])
+
+  @@unique([studentMemberId, classSessionId]) // Um aluno só pode ter uma presença por sessão
+  @@map("attendances")
+}
+
+// NOVA MODEL: SubscriptionPlan (Define os planos de assinatura que a academia pode oferecer)
+model SubscriptionPlan {
+  id               String       @id @default(uuid())
+  name             String
+  price            Decimal      @db.Decimal(10, 2) // Preço do plano (ex: 150.00)
+  durationInMonths Int?         // Duração do plano em meses (ex: 1 para mensal, 12 para anual). Nulo para planos avulsos ou flexíveis.
+  description      String?
+  isActive         Boolean      @default(true) // Se o plano está ativo para ser contratado
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+
+  academy          Academy      @relation(fields: [academyId], references: [id], onDelete: Cascade)
+  academyId        String       @map("academy_id")
+
+  subscriptions    Subscription[] // Relação com as assinaturas deste plano
+
+  @@index([academyId])
+  @@map("subscription_plans")
+}
+
+// NOVA MODEL: Subscription (Assinatura de um membro a um plano)
+model Subscription {
+  id                 String       @id @default(uuid())
+  startDate          DateTime     @default(now()) @map("start_date")
+  endDate            DateTime?    @map("end_date") // Calcula com base no startDate e duration do plano, pode ser nulo se for avulso/por uso
+  status             String       @default("ACTIVE") // ACTIVE, CANCELED, EXPIRED, PAUSED, TRIAL
+  paymentProviderRef String?      @map("payment_provider_ref") // ID da assinatura no gateway de pagamento (ex: sub_abc123 do Stripe)
+  paymentProvider    String?      @map("payment_provider") // Ex: "Stripe", "MercadoPago", "Manual"
+  createdAt          DateTime     @default(now()) @map("created_at")
+  updatedAt          DateTime     @updatedAt @map("updated_at")
+
+  // O membro que possui esta assinatura (referencia um Member que tem a role ALUNO)
+  member             Member       @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId           String       @map("member_id")
+
+  subscriptionPlan   SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+  subscriptionPlanId String       @map("subscription_plan_id")
+
+  // Para garantir isolamento e facilitar queries por academia
+  academyId          String
+  @@index([academyId])
+
+  payments           PaymentTransaction[] // Relação com as transações de pagamento desta assinatura
+
+  @@map("subscriptions")
+}
+
+// NOVA MODEL: PaymentTransaction (Registro de cada transação de pagamento)
+model PaymentTransaction {
+  id              String    @id @default(uuid())
+  amount          Decimal   @db.Decimal(10, 2)
+  currency        String    @default("BRL")
+  status          String    @default("PENDING") // PENDING, COMPLETED, FAILED, REFUNDED
+  type            String    @default("SUBSCRIPTION_PAYMENT") // SUBSCRIPTION_PAYMENT, SINGLE_PAYMENT, SETUP_FEE
+  transactionDate DateTime  @default(now()) @map("transaction_date")
+  externalRef     String?   @unique @map("external_ref") // ID da transação no gateway de pagamento
+  description     String?   // Descrição da transação (ex: "Mensalidade Junho")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  subscription    Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  subscriptionId  String      @map("subscription_id")
+
+  // Para garantir isolamento e facilitar queries por academia
+  academyId       String
+  @@index([academyId])
+
+  @@map("payment_transactions")
 }
 
 model Enrollment {
