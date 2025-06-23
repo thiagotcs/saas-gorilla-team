@@ -41,6 +41,24 @@ import { rejectInvite } from '@/http/routes/invites/reject-invite'
 import { revokeInvite } from '@/http/routes/invites/revoke-invite'
 import { getPendingInvites } from '@/http/routes/invites/get-pending-invites'
 import { getAcademyBilling } from '@/http/routes/billing/get-academy-billing'
+import { createClassSession } from '@/http/routes/class-sessions/create-class-session'
+import { getClassSessions } from '@/http/routes/class-sessions/get-class-sessions'
+import { getClassSession } from '@/http/routes/class-sessions/get-class-session'
+import { updateClassSession } from '@/http/routes/class-sessions/update-class-session'
+import { deleteClassSession } from '@/http/routes/class-sessions/delete-class-session'
+import { createAttendance } from '@/http/routes/attendances/create-attendance'
+import { getAttendances } from '@/http/routes/attendances/get-attendances'
+import { updateAttendance } from '@/http/routes/attendances/update-attendance'
+import { createSubscriptionPlan } from '@/http/routes/subscription-plans/create-subscription-plan'
+import { getSubscriptionPlans } from '@/http/routes/subscription-plans/get-subscription-plans'
+import { updateSubscriptionPlan } from '@/http/routes/subscription-plans/update-subscription-plan'
+import { deleteSubscriptionPlan } from '@/http/routes/subscription-plans/delete-subscription-plan'
+import { createSubscription } from '@/http/routes/subscriptions/create-subscription'
+import { getSubscriptions } from '@/http/routes/subscriptions/get-subscriptions'
+import { updateSubscription } from '@/http/routes/subscriptions/update-subscription'
+import { createPaymentTransaction } from '@/http/routes/payment-transactions/create-payment-transaction'
+import { getPaymentTransactions } from '@/http/routes/payment-transactions/get-payment-transactions'
+import { getPaymentTransaction } from '@/http/routes/payment-transactions/get-payment-transaction'
 
 const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -52,8 +70,9 @@ app.setErrorHandler(errorHandler)
 app.register(fastifySwagger, {
   openapi: {
     info: {
-      title: 'Next.js SaaS',
-      description: 'Full-stack SaaS with multi-tenant & RBAC.',
+      title: 'API de Gestão de Academias',
+      description:
+        'API completa para gerenciamento de academias de artes marciais, esportes e fitness. Inclui módulos para usuários, membros, turmas, agendamento de aulas, controle de presença, gestão de planos de assinatura, pagamentos e robusto controle de acesso baseado em funções (RBAC) com suporte a multi-tenancy.',
       version: '1.0.0',
     },
     components: {
@@ -113,6 +132,29 @@ app.register(revokeInvite)
 app.register(getPendingInvites)
 
 app.register(getAcademyBilling)
+
+app.register(createClassSession)
+app.register(getClassSessions)
+app.register(getClassSession)
+app.register(updateClassSession)
+app.register(deleteClassSession)
+
+app.register(createAttendance)
+app.register(getAttendances)
+app.register(updateAttendance)
+
+app.register(createSubscriptionPlan)
+app.register(getSubscriptionPlans)
+app.register(updateSubscriptionPlan)
+app.register(deleteSubscriptionPlan)
+
+app.register(createSubscription)
+app.register(getSubscriptions)
+app.register(updateSubscription)
+
+app.register(createPaymentTransaction)
+app.register(getPaymentTransactions)
+app.register(getPaymentTransaction)
 
 app.listen({ port: env.SERVER_PORT }).then(() => {
   console.log('HTTP server running!')
