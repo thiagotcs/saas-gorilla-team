@@ -9,7 +9,7 @@ export const env = createEnv({
 
     GOOGLE_OAUTH_CLIENT_ID: z.string(),
     GOOGLE_OAUTH_CLIENT_SECRET: z.string(),
-    GOOGLE_OAUTH_REDIRECT_URI: z.string().url(),
+    GOOGLE_OAUTH_CLIENT_REDIRECT_URI: z.string().url(),
   },
   client: {},
   shared: {},
@@ -19,7 +19,8 @@ export const env = createEnv({
     JWT_SECRET: process.env.JWT_SECRET,
     GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
     GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
-    GOOGLE_OAUTH_REDIRECT_URI: process.env.GOOGLE_OAUTH_CLIENT_REDIRECT_URI,
+    GOOGLE_OAUTH_CLIENT_REDIRECT_URI:
+      process.env.GOOGLE_OAUTH_CLIENT_REDIRECT_URI,
   },
   emptyStringAsUndefined: true,
 })
