@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { ThemeProvider } from 'next-themes'
+import { BackToTop } from '@/components/back-to-top'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -12,8 +14,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body>{children}</body>
+    // <html lang="en" className="dark">
+    //   <body>{children}</body>
+    // </html>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <BackToTop />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }
