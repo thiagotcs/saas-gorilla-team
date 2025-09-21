@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { isAuthenticated } from '@/lib/server-auth-utils'
 import { PublicHeaderInfo } from '@/components/public-header-info'
 import { PublicHeader } from '@/components/public-header'
-import { BackToTop } from '@/components/back-to-top'
+import Footer from './footer/page'
 export default async function AppLayout({
   children,
   sheet,
@@ -17,13 +17,13 @@ export default async function AppLayout({
 
   return (
     <>
+      {sheet}
       <div className="hidden md:block">
         <PublicHeaderInfo />
       </div>
       <PublicHeader />
-      {/* <BackToTop /> */}
       {children}
-      {sheet}
+      <Footer />
     </>
   )
 }
