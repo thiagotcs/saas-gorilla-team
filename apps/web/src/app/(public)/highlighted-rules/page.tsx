@@ -1,19 +1,32 @@
-import { SectionTitle } from '@/components/section-title'
-import { Separator } from '@/components/ui/separator'
-import { RulesCard } from './rules-card/page'
-export default function HighlightedRules() {
-  return (
-    <section className="flex w-full flex-col py-16">
-      <div className="lg:min-w-7xl m-auto mt-0 flex max-w-lg flex-col gap-8 px-4">
-        <SectionTitle title="Regras novas!" />
-        <Separator
-          orientation="horizontal"
-          className="my-8 max-w-7xl border-b border-b-gray-800"
-        />
-        <RulesCard />
-        <RulesCard />
-        <RulesCard />
-      </div>
-    </section>
+import { RulesSection } from '@/components/pages/rules/rules-section'
+import { Rules } from '@/types/rules'
+import { fetchHygraphQuery } from '@/utils/fetch-hygraph-query'
+
+const getRulesData = async (): Promise<{ highlightRules: Rules[] }> => {
+  const query = `
+    query RulesQuery {
+      page(where: { slug: "home" }) {
+        highlightRules {
+          slug
+          title
+          shortDescription
+          description { text }
+          thumbnail { url }
+          pdf { url }
+        }
+      }
+    }
+  `
+  const data = await fetchHygraphQuery<{ page: { highlightRules: Rules[] } }>(
+    query,
+    60 * 60 * 24 // cache 1 dia
   )
+
+  return { highlightRules: data.page.highlightRules }
+}
+
+export default async function HighlightedRules() {
+  const { highlightRules } = await getRulesData()
+
+  return <RulesSection rules={highlightRules ?? []} />
 }
