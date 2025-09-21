@@ -1,42 +1,54 @@
 import { Crown } from 'lucide-react'
+import Image from 'next/image'
+import profilePicture from '@/assets/bjj-pro-curitiba.jpeg'
+import { Timeline, TimelineItem } from '@/components/timeline'
 
 export const AboutTimeLine = () => {
+  const items: TimelineItem[] = [
+    {
+      id: '1',
+      date: 'SEPTEMBER 2019',
+      title: 'ADCC Super Fight',
+      description: (
+        <p>
+          Won 4th ADCC Super Fight title against Felipe Pena, making it his{' '}
+          <strong>6th ADCC title overall!</strong>
+        </p>
+      ),
+      icon: <Crown />,
+      image: (
+        <Image
+          src={profilePicture}
+          alt="Foto do campeonato Curitiba - Gorilla Team"
+          className="aspect-auto w-full rounded-lg object-cover shadow-2xl"
+          unoptimized
+        />
+      ),
+    },
+    {
+      id: '2',
+      date: 'JUNE 2018',
+      description: (
+        <p>
+          Announced retirement from BJJ tournaments to focus on his business,
+          with 2019 ADCC Super Fight to be his last fight.
+        </p>
+      ),
+      icon: <Crown />,
+    },
+    {
+      id: '3',
+      date: 'APRIL 2018',
+      description: <p>Angelica won the UAEJJF World Pro Championships.</p>,
+      icon: <Crown />,
+    },
+  ]
+
   return (
-    <div className="grid grid-cols-[1fr_40px_1fr]   gap-4 md:gap-10">
-      {/* texto1 */}
-      <div className="flex flex-col gap-2 rounded-lg  p-6 text-gray-500 transition-all hover:bg-gray-600/30 ">
-        <div className="flex flex-col gap-2 text-sm sm:text-base">
-          <h1 className="text-3xl text-gray-300">Juares Santos datas</h1>
-          <div className="text-gray-400">
-            <p>
-              Explore a jornada de um verdadeiro campeão e inspire-se na arte
-              suave de Juares Santos.
-            </p>
-          </div>
-        </div>
+    <main className="min-h-dvh  p-6">
+      <div className="mx-auto max-w-6xl">
+        <Timeline items={items} alternate />
       </div>
-      {/* icone */}
-      <div className=" flex flex-col items-center">
-        <div className="rounded-full border border-gray-500 p-3 transition-all hover:border-2 hover:border-amber-300/80 ">
-          <Crown
-            size={40}
-            className="hover:text-2 transition-all hover:text-amber-300/80"
-          />
-        </div>
-        <div className="h-full border border-gray-500 transition-all hover:border-amber-300/80" />
-      </div>
-      {/* texto */}
-      <div className="flex flex-col gap-2 rounded-lg  p-6 text-gray-500 transition-all hover:bg-gray-600/30 hover:text-emerald-500">
-        <div className="flex flex-col gap-2 text-sm sm:text-base">
-          <h1 className="text-3xl text-gray-300">Juares Santos datas</h1>
-          <div className="text-gray-400">
-            <p>
-              Explore a jornada de um verdadeiro campeão e inspire-se na arte
-              suave de Juares Santos.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    </main>
   )
 }
