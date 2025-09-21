@@ -4,6 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-roboto); /* Roboto vira a sans principal */
+  --font-open-sans: var(--font-open-sans);
+  --font-oswald: var(--font-oswald);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -124,5 +129,17 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .font-open-sans {
+    font-family: var(--font-open-sans), sans-serif;
+  }
+  .font-oswald {
+    font-family: var(--font-oswald), sans-serif;
+  }
+  .font-roboto {
+    font-family: var(--font-roboto), sans-serif;
   }
 }
