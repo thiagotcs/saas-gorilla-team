@@ -1,7 +1,6 @@
 'use client'
 
-// import { cn } from '@/app/lib/utils'
-// import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 type SectionTitleProps = {
   title: string
@@ -21,19 +20,14 @@ export const SectionTitle = ({
   }
 
   return (
-    <div className="m-auto flex flex-col gap-4 pb-16">
-      {/* <motion.span
-        className="font-mono text-sm text-emerald-400"
-        {...animProps}
-        transition={{ duration: 0.5 }}
-      >{`../${subtitle}`}</motion.span> */}
-      <h3
+    <div className="m-auto flex flex-col gap-4">
+      <motion.h3
         className="m-auto text-center text-3xl font-medium uppercase text-gray-100"
         {...animProps}
-        // transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
       >
         {title}
-      </h3>
+      </motion.h3>
       <strong className="text-center text-2xl font-medium">{subtitle}</strong>
     </div>
   )

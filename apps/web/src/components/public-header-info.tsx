@@ -1,13 +1,20 @@
+'use client'
 import Link from 'next/link'
 import Image from 'next/image'
 import gorillaIconMenu from '@/assets/gorilla_icon.png'
 import { Mail, Phone } from 'lucide-react'
 import { Separator } from './ui/separator'
 import { TrialClass } from './pages/home/trial-class'
+import { motion } from 'framer-motion'
 
 export function PublicHeaderInfo() {
   return (
-    <header className="w-full bg-[#fef3c7] p-2 dark:bg-[#121214]">
+    <motion.header
+      className="relative w-full bg-[#fef3c7] p-2 dark:bg-[#121214]"
+      initial={{ top: -100 }}
+      animate={{ top: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="mx-auto flex flex-col items-center  justify-between  gap-1 px-4 sm:flex-row lg:max-w-7xl">
         <div className="flex gap-6">
           {/* <Link href="/" className="flex items-center gap-2"> */}
@@ -31,6 +38,6 @@ export function PublicHeaderInfo() {
           <TrialClass />
         </div>
       </div>
-    </header>
+    </motion.header>
   )
 }

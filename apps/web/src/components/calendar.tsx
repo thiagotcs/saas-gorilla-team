@@ -49,6 +49,7 @@ function Calendar() {
         title: 'Aula-2 Fundamentos Kids',
         start: '2025-08-04 19:00',
         end: '2025-08-04 20:00',
+        description: 'Prof.Fabio - Aula de fundamentos para iniciantes',
       },
       {
         id: '3',

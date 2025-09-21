@@ -22,7 +22,7 @@ export function PublicHeader() {
     { href: '/contact', label: 'Fale Conosco' },
   ]
   return (
-    <header className="sticky top-0 z-50 bg-white/80 py-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-gray-900/80 ">
+    <header className="sticky top-0 z-50 bg-white/80 py-3 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-gray-900/80">
       <div className="mx-auto flex max-w-full items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">

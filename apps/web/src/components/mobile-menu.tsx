@@ -15,9 +15,9 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const navLinks = [
     { href: '/', label: 'Início' },
-    { href: '/academys', label: 'Unidades' },
-    { href: '/roles', label: 'Regras' },
-    { href: '/abouts', label: 'Sobre' },
+    { href: '/academys', label: 'Academias' },
+    { href: '/highlighted-rules', label: 'Regras' },
+    { href: '/about', label: 'Sobre' },
     { href: '/adult-jiu-jitsu', label: 'Jiu-jitsu Adulto' },
     { href: '/kids-jiu-jitsu', label: 'Jiu-jitsu Infantil' },
     { href: '/class-schedule', label: 'Horário de aula' },

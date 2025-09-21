@@ -12,7 +12,8 @@ import { Textarea } from './ui/textarea'
 // import { zodResolver } from '@hookform/resolvers/zod'
 // import { Button } from '../button'
 // import { HiArrowNarrowRight } from 'react-icons/hi'
-// import { motion } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { fadeUpAnimation } from '@/lib/animations'
 // import axios from 'axios'
 // import { toast } from 'react-hot-toast'
 // import { fadeUpAnimation } from '@/app/lib/animations'
@@ -82,7 +83,7 @@ export const ContactForm = () => {
             <div className="absolute inset-0 bg-emerald-600 opacity-20 blur-2xl" />
           </div>
         </motion.form> */}
-        <form action="" className="space-y-4">
+        <motion.form action="" className="space-y-4" {...fadeUpAnimation}>
           <div className="space-y-1">
             <Label htmlFor="name">Name</Label>
             <Input name="name" id="name" />
@@ -129,7 +130,7 @@ export const ContactForm = () => {
           <Button className="w-full" type="submit">
             Enviar mensagem
           </Button>
-        </form>
+        </motion.form>
       </div>
     </section>
   )
